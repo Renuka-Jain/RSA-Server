@@ -4,20 +4,18 @@ import * as rsa from './rsa'
 import * as bigintConversion from 'bigint-conversion'
 
 
-const port = 3000
+const port = 3001
 
 
 const app= express()
 app.use(cors({
-    origin: 'http://localhost:3001' //url del angular del cliente
+    origin: 'http://localhost:3000' //url del cliente
 }))
 
 app.get('/',(req,res)=>{
     res.send('hello arnauuu')
 
 })
-
-
 
 
 app.get('/rsa',async(req,res)=>{
