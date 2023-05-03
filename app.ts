@@ -6,46 +6,43 @@ import { Request, Response } from 'express';
 import { Router } from 'express';
 import bodyParser from "body-parser";
 
+const rsaKeysPromise = rsa.generateKeys(2048)   
 const router = Router();
-
 const port = 3001
+const app = express()
 
-const app= express()
+// puerto cliente (URL)
 app.use(cors({
-    origin: 'http://localhost:3000' //url del cliente
+    origin: 'http://localhost:3000'
 }))
 
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json())
 
-app.get('/',(req,res)=>{
-    res.send('hello arnauuu')
+app.get('/',(req: Request, res: Response)=>{
+    res.send('hello world')
 })
 
-app.post('/signed', async(req: Request, res: Response)=>{
+app.post('/sign', async (req: Request, res: Response)=>{
     const text = req.body;
     console.log(text)
     //text esta signat, falta verificar
 })
 
-app.post('/encrypted', async(req: Request, res: Response)=>{
+app.post('/decrypt', async (req: Request, res: Response)=>{
     console.log(req.body.text)
     //text esta encryptat, falta despencriptar
 })
 
-app.get('/rsapubkeyserver',async(req,res)=>{ //desde el cliente se puede pedir public key
-    const rsaKeys = await rsa.generateKeys(2048)   
-    console.log(rsaKeys)   
-    //res.json({publicKey: rsaKeys.publicKey})
+// cliente pide pubkey, server la manda
+app.get('/rsapubkey', async (req: Request, res: Response)=>{
+    const rsaKeys = await rsaKeysPromise
+    console.log(rsaKeys)
     res.json({publickey: {
         e: bigintConversion.bigintToHex(rsaKeys.publicKey.e),
         n: bigintConversion.bigintToHex(rsaKeys.publicKey.n)
     }})
 })
-
-
-
-
 
 app.listen(port, function() {
     console.log(`listenning on http://locahost:${port}`)
