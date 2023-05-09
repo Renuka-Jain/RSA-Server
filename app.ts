@@ -35,7 +35,7 @@ app.post('/decrypt', async (req: Request, res: Response)=>{
     let descryptedbigint = (await rsaKeysPromise).privateKey.decrypt(messageBigint);
     let descrypted=bigintConversion.bigintToText(descryptedbigint)
     console.log('decripted message: '+ descrypted);
-    //text esta encryptat, falta despencriptar
+    //funciona 
 })
 
 // cliente pide pubkey, server la manda

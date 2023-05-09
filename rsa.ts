@@ -22,7 +22,7 @@ export class MyRsaPrivatKey {
 }
 
 export interface MyRsaJsonPupblicKey {
-  e: string // base64
+  e: string // base64 
   n: string // base64
 }
 export class MyRsaPupblicKey {
