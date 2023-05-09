@@ -25,12 +25,16 @@ app.get('/',(req: Request, res: Response)=>{
 
 app.post('/sign', async (req: Request, res: Response)=>{
     const text = req.body;
-    console.log(text)
     //text esta signat, falta verificar
 })
 
 app.post('/decrypt', async (req: Request, res: Response)=>{
     console.log(req.body.text)
+    let message = req.body.text;
+    let messageBigint = bigintConversion.base64ToBigint(message);
+    let descryptedbigint = (await rsaKeysPromise).privateKey.decrypt(messageBigint);
+    let descrypted=bigintConversion.bigintToText(descryptedbigint)
+    console.log('decripted message: '+ descrypted);
     //text esta encryptat, falta despencriptar
 })
 
@@ -38,10 +42,7 @@ app.post('/decrypt', async (req: Request, res: Response)=>{
 app.get('/rsapubkey', async (req: Request, res: Response)=>{
     const rsaKeys = await rsaKeysPromise
     console.log(rsaKeys)
-    res.json({publickey: {
-        e: bigintConversion.bigintToHex(rsaKeys.publicKey.e),
-        n: bigintConversion.bigintToHex(rsaKeys.publicKey.n)
-    }})
+    res.json(rsaKeys.publicKey.toJSON())
 })
 
 app.listen(port, function() {
