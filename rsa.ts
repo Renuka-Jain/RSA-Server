@@ -5,7 +5,7 @@ export class MyRsaPrivatKey {
   
   d: bigint
   n: bigint
-  static sign: any
+
 
   constructor(d: bigint, n: bigint) {
     this.d = d

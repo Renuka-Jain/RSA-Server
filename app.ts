@@ -23,9 +23,15 @@ app.get('/',(req: Request, res: Response)=>{
     res.send('hello world')
 })
 
-app.post('/sign', async (req: Request, res: Response)=>{
-    const text = req.body;
-    //text esta signat, falta verificar
+app.post('/tosign', async (req: Request, res: Response)=>{
+    let message = req.body.text;
+
+    let messageBigint = bigintConversion.base64ToBigint(message);
+    console.log("blinded: "+messageBigint)
+    let signedbigint = (await rsaKeysPromise).privateKey.sign(messageBigint);
+    let signed=bigintConversion.bigintToBase64(signedbigint)
+    console.log('signed message: '+ signed);
+    res.json({signed})
 })
 
 app.post('/decrypt', async (req: Request, res: Response)=>{
